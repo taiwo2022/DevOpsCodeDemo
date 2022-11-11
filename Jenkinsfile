@@ -1,4 +1,3 @@
-
 pipeline{
     tools{
         jdk 'myjava'
@@ -7,21 +6,18 @@ pipeline{
 	agent any
       stages{
            stage('Checkout'){
-	    
-               steps{
+              steps{
 		 echo 'cloning..'
-                 git 'https://github.com/Sonal0409/DevOpsClassCodes.git'
+                 git 'https://github.com/theitern/DevOpsCodeDemo.git'
               }
           }
           stage('Compile'){
-             
               steps{
-                  echo 'complie the code..'
+                  echo 'compiling..'
                   sh 'mvn compile'
 	      }
           }
           stage('CodeReview'){
-		  
               steps{
 		    
 		  echo 'codeReview'
@@ -29,22 +25,20 @@ pipeline{
               }
           }
            stage('UnitTest'){
-		  
               steps{
-	         
+	         echo 'Testing'
                   sh 'mvn test'
               }
-          
+               post {
+               success {
+                   junit 'target/surefire-reports/*.xml'
+               }
+           }	
           }
-        
           stage('Package'){
-		  
               steps{
-		  
                   sh 'mvn package'
               }
           }
-	     
-          
       }
 }
